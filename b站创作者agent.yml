@@ -1,0 +1,411 @@
+flowMeta:
+  name: b站创作者agent
+  description: 可以方便的找到对标的创作者
+  avatarIcon: https://oss-beijing-m8.openstorage.cn/SparkBotProd/icon/common/emojiitem_00_10@2x.png
+  avatarColor: '#FFEAD5'
+  advancedConfig: '{"prologue":{"enabled":true,"inputExample":["","",""]},"textToSpeech":{"enabled":true,"vcn_cn":"x5_lingxiaotang_flow","vcn_en":""}}'
+  dslVersion: v1
+flowData:
+  nodes:
+  - id: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+    dragging: false
+    selected: false
+    width: 362
+    height: 122
+    position:
+      x: 1979.888322447679
+      y: -1699.2854128584445
+    positionAbsolute:
+      x: 1979.888322447679
+      y: -1699.2854128584445
+    type: custom
+    data:
+      allowInputReference: false
+      allowOutputReference: true
+      label: 开始
+      status: ''
+      nodeMeta:
+        aliasName: 开始节点
+        nodeType: 基础节点
+      inputs: [
+        ]
+      outputs:
+      - id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+        name: AGENT_USER_INPUT
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: 用户本轮对话输入内容
+        required: true
+        deleteDisabled: true
+      nodeParam:
+        setAnswerContentErrMsg: 输出中变量名校验不通过,自动生成JSON失败
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/start-node-icon.png
+      description: 工作流的开启节点，用于定义流程调用所需的业务变量信息。
+      updatable: false
+  - id: node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    dragging: false
+    selected: false
+    width: 362
+    height: 82
+    position:
+      x: 2875.0340711263234
+      y: -1613.4795642407707
+    positionAbsolute:
+      x: 2875.0340711263234
+      y: -1613.4795642407707
+    type: custom
+    data:
+      allowInputReference: true
+      allowOutputReference: false
+      label: 结束
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        aliasName: 结束节点
+        nodeType: 基础节点
+      inputs:
+      - id: 82de2b42-a059-4c98-bffb-b6b4800fcac9
+        name: output
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: d61c1c30-f173-493d-811b-4e021b087c94
+              nodeId: spark-llm::5ab1fe43-90e3-4c6c-88f2-4859065aea5d
+              name: output
+            contentErrMsg: ''
+        fileType: ''
+      outputs: [
+        ]
+      nodeParam:
+        template: '{{output}}'
+        streamOutput: true
+        outputMode: 0
+        templateErrMsg: ''
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/end-node-icon.png
+      description: 工作流的结束节点，用于输出工作流运行后的最终结果。
+      updatable: false
+  - id: spark-llm::4cd3a57d-2bfa-4cf3-bb2e-0242eabe95d9
+    dragging: false
+    selected: false
+    width: 362
+    height: 132
+    position:
+      x: 2228.9478497768214
+      y: -1407.3734843618788
+    positionAbsolute:
+      x: 2228.9478497768214
+      y: -1407.3734843618788
+    type: custom
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: up对标
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        nodeType: 基础节点
+        aliasName: 大模型
+      inputs:
+      - id: b018d6e5-eadf-4e9b-9334-ff483a571bed
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+              nodeId: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+              name: AGENT_USER_INPUT
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: c9da48dd-3a83-4851-b9c2-8c974f57fbbf
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          properties: [
+            ]
+          default: '2'
+      nodeParam:
+        maxTokens: 2048
+        topK: 4
+        auditing: default
+        template: '{{input}}'
+        respFormat: 2
+        appId: 680ab54f
+        uid: 537b90a4-6c1a-4bb7-82b3-e91e35f99daa
+        enableChatHistoryV2:
+          isEnabled: false
+          rounds: 1
+        templateErrMsg: ''
+        llmId: 593066024
+        domain: deepseek-chat
+        serviceId: deepseek-chat
+        url: https://api.deepseek.com/v1/chat/completions
+        modelId: 1
+        isThink: false
+        multiMode: false
+        modelName: deepseek-chat
+        modelEnabled: true
+        llmIdErrMsg: ''
+        source: deepseek
+        extraParams:
+          temperature: 1
+        systemTemplate: 你需要根据用户的输入提供给用户可以对标的up主uid
+        setAnswerContentErrMsg: ''
+      retryConfig:
+        customOutput: |-
+          {
+            "input": ""
+          }
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/largeModelIcon.png
+      description: 根据输入的提示词，调用选定的大模型，对提示词作出回答
+      updatable: false
+  - id: ifly-code::b09bbb37-b042-4540-9651-af913637d670
+    dragging: false
+    selected: true
+    width: 362
+    height: 148
+    position:
+      x: 2406.1507389873827
+      y: -1707.4301634603814
+    positionAbsolute:
+      x: 2406.1507389873827
+      y: -1707.4301634603814
+    type: custom
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 获取b站相应up的信息
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        nodeType: 工具
+        aliasName: 代码
+      inputs:
+      - id: 1e4e5814-f8bf-4998-aa35-e8ad23d0b731
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: c9da48dd-3a83-4851-b9c2-8c974f57fbbf
+              nodeId: spark-llm::4cd3a57d-2bfa-4cf3-bb2e-0242eabe95d9
+              name: input
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: ed4c499b-1c52-48bb-8e3f-53783f3d1821
+        name: title
+        nameErrMsg: ''
+        schema:
+          type: string
+          properties: [
+            ]
+          default: ''
+      - id: c9697b3b-5f43-4ccf-b260-a2ac069a33c2
+        name: play
+        nameErrMsg: ''
+        schema:
+          type: string
+          properties: [
+            ]
+          default: ''
+      nodeParam:
+        code: "# -*- coding: utf-8 -*-\nimport json\nimport requests\n\n# 🚨 适配你刚才\
+          启动的 FastAPI 爬虫服务\ndef main(input):\n    \"\"\"\n    这里 input 对应了你工作流节点里定\
+          义的那个输入的变量名\n    \"\"\"\n    # 🚨 核心配置：请确保此 IP 和 端口 (8001) 能够被你的运行环境访问到\n\
+          \    # 如果是在同一台机器上运行，建议改为 \"http://127.0.0.1:8001/api/bili/query\"\n    TARGET_PROXY_URL\
+          \ = \"http://10.193.97.179:8001/api/bili/query\"\n    \n    # 获取 UID 的逻辑\
+          \n    uid = \"\"\n    try:\n        # 这个 input 是平台通过 kwargs 传进来的参数\n   \
+          \     if isinstance(input, dict):\n            # 兼容 input 变量名或直接从字典中取 input/mid\
+          \ 键\n            uid = input.get(\"input\", \"\") or input.get(\"mid\",\
+          \ \"\")\n        else:\n            uid = str(input).strip()\n    except:\n\
+          \        uid = str(input)\n\n    # 发起请求\n    # 注意：服务端接收的参数名是 'mid'\n   \
+          \ params = {\n        \"mid\": uid\n    }\n\n    try:\n        # 设置超时为 120\
+          \ 秒，因为抓取大量投稿视频需要翻页，比较耗时\n        response = requests.get(TARGET_PROXY_URL,\
+          \ params=params, timeout=120)\n        \n        # 检查响应状态\n        if response.status_code\
+          \ == 200:\n            data = response.json()\n            ret = {\n   \
+          \             \"message\": f\"成功读取 UID: {uid}\\n数据已抓取，总计 {data.get('total',\
+          \ 0)} 个视频。\",\n                \"status\": \"success\",\n              \
+          \  \"data\": data # 返回完整的 JSON 结构供后续节点解析\n            }\n        else:\n\
+          \            ret = {\n                \"message\": f\"服务返回错误 (HTTP {response.status_code}):\
+          \ {response.text}\",\n                \"status\": \"error\"\n          \
+          \  }\n            \n    except Exception as e:\n        ret = {\n      \
+          \      \"message\": f\"无法连接爬虫服务: {str(e)}\",\n            \"status\": \"\
+          error\"\n        }\n    return ret\n\n# --- 本地测试代码 (生产环境下请注释掉) ---\nif __name__\
+          \ == \"__main__\":\n    test_input = {\"input\": \"2\"}\n    print(json.dumps(main(test_input),\
+          \ ensure_ascii=False, indent=2))"
+        appId: 680ab54f
+        uid: 537b90a4-6c1a-4bb7-82b3-e91e35f99daa
+        codeErrMsg: ''
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/codeIcon.png
+      description: 面向开发者提供代码开发能力，目前仅支持python语言，允许使用该节点已定义的变量作为参数传入，返回语句用于输出函数的结果
+      updatable: false
+  - id: spark-llm::5ab1fe43-90e3-4c6c-88f2-4859065aea5d
+    dragging: false
+    selected: false
+    width: 362
+    height: 132
+    position:
+      x: 2739.8096320813975
+      y: -1408.0492941175214
+    positionAbsolute:
+      x: 2739.8096320813975
+      y: -1408.0492941175214
+    type: custom
+    data:
+      allowInputReference: true
+      allowOutputReference: true
+      label: 建议生成
+      labelEdit: false
+      references: [
+        ]
+      status: ''
+      nodeMeta:
+        nodeType: 基础节点
+        aliasName: 大模型
+      inputs:
+      - id: 8334d06d-8e6c-42ad-83ba-878f8d4a7767
+        name: input
+        nameErrMsg: ''
+        schema:
+          type: string
+          value:
+            type: ref
+            content:
+              id: 0918514b-72a8-4646-8dd9-ff4a8fc26d44
+              nodeId: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+              name: AGENT_USER_INPUT
+            contentErrMsg: ''
+        fileType: ''
+      outputs:
+      - id: d61c1c30-f173-493d-811b-4e021b087c94
+        name: output
+        nameErrMsg: ''
+        schema:
+          type: string
+          default: ''
+      nodeParam:
+        maxTokens: 2048
+        topK: 4
+        auditing: default
+        template: '{{input}}'
+        respFormat: 0
+        appId: 680ab54f
+        uid: 537b90a4-6c1a-4bb7-82b3-e91e35f99daa
+        enableChatHistoryV2:
+          isEnabled: false
+          rounds: 2
+        templateErrMsg: ''
+        systemTemplate: |-
+          # Role: B 站深度内容运营专家
+
+          ## Profile
+          你是一位深耕 Bilibili 平台的资深内容策划，精通 B 站的算法推荐机制、社区调性（梗文化、弹幕文化）以及不同分区（如科技、生活、游戏、知识区）的流量密码。你擅长根据用户的基础需求，将其转化为具有“爆款潜力”的视频企划。
+
+          ## Goals
+          根据用户提供的【创作领域/兴趣点】和【目标受众】，生成一套完整的内容创作建议，包括账号定位、选题方向、视频结构及运营策略。
+
+          ## Content Framework (输出规范)
+          请按以下结构输出建议，确保内容具有 B 站特色：
+
+          ### 1. 账号人格化定位 (Persona)
+          * **UP主形象：** 建议一个记忆点强的身份标签（例如：硬核技术宅、幽默说书人）。
+          * **核心差异化：** 为什么观众要看你而不是别人？（提供一个独特的切入点）。
+
+          ### 2. 爆款选题库 (Content Pillars)
+          * **流量钩子：** 提供 3 个具体的视频标题建议（需符合 B 站“标题党”但不低俗的风格）。
+          * **内容系列：** 建议一个可以持续更新的专栏系列名称。
+
+          ### 3. 视频制作模版 (Execution)
+          * **黄金 30 秒：** 如何在视频开头留住观众？（设计一个弹幕互动点）。
+          * **中段节奏：** 建议的视频时长及叙事逻辑。
+          * **三连引导：** 设计一个自然且不生硬的“求三连”台词或环节。
+
+          ### 4. 运营与互动策略 (Engagement)
+          * **弹幕埋点：** 在视频中预留哪些槽点或互动话题？
+          * **封面风格：** 描述一种具有点击欲望的封面构图建议。
+
+          ## Constraints
+          * 语言风格：专业但不说教，带有一点点 B 站社区的亲和力和幽默感。
+          * 实操性：建议必须落地，避免空洞的理论。
+
+          ## Workflow
+          1. 请先询问用户的【创作领域】、【个人优势】和【预期目标】。
+          2. 根据回答生成上述详细建议。
+        llmIdErrMsg: ''
+        llmId: 593066024
+        domain: deepseek-chat
+        serviceId: deepseek-chat
+        url: https://api.deepseek.com/v1/chat/completions
+        modelId: 1
+        isThink: false
+        multiMode: false
+        modelName: deepseek-chat
+        modelEnabled: true
+        source: deepseek
+        extraParams:
+          temperature: 1
+      icon: https://oss-beijing-m8.openstorage.cn/pro-bucket/sparkBot/common/workflow/icon/largeModelIcon.png
+      description: 根据输入的提示词，调用选定的大模型，对提示词作出回答
+      updatable: false
+  edges:
+  - source: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+    target: spark-llm::4cd3a57d-2bfa-4cf3-bb2e-0242eabe95d9
+    type: customEdge
+    id: reactflow__edge-node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783-spark-llm::4cd3a57d-2bfa-4cf3-bb2e-0242eabe95d9
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
+  - source: spark-llm::4cd3a57d-2bfa-4cf3-bb2e-0242eabe95d9
+    target: ifly-code::b09bbb37-b042-4540-9651-af913637d670
+    type: customEdge
+    id: reactflow__edge-spark-llm::4cd3a57d-2bfa-4cf3-bb2e-0242eabe95d9-ifly-code::b09bbb37-b042-4540-9651-af913637d670
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
+  - source: ifly-code::b09bbb37-b042-4540-9651-af913637d670
+    target: spark-llm::5ab1fe43-90e3-4c6c-88f2-4859065aea5d
+    type: customEdge
+    id: reactflow__edge-ifly-code::b09bbb37-b042-4540-9651-af913637d670-spark-llm::5ab1fe43-90e3-4c6c-88f2-4859065aea5d
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
+  - source: spark-llm::5ab1fe43-90e3-4c6c-88f2-4859065aea5d
+    target: node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    type: customEdge
+    id: reactflow__edge-spark-llm::5ab1fe43-90e3-4c6c-88f2-4859065aea5d-node-end::cda617af-551e-462e-b3b8-3bb9a041bf88
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
+  - source: node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783
+    target: spark-llm::5ab1fe43-90e3-4c6c-88f2-4859065aea5d
+    type: customEdge
+    id: reactflow__edge-node-start::d61b0f71-87ee-475e-93ba-f1607f0ce783-spark-llm::5ab1fe43-90e3-4c6c-88f2-4859065aea5d
+    markerEnd:
+      type: arrow
+      color: '#6356EA'
+    data:
+      edgeType: curve
